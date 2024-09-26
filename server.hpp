@@ -4,9 +4,9 @@
 class Server{
     public:
     Server(const char* host, uint16_t port);
-    void run();
+    int run();
 
-    uint16_t max_buffer_size = 8000;
+    uint16_t max_buffer_size = 8192;
 
     private:
     const char* _host;

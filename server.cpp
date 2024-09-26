@@ -3,7 +3,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "server.hpp"
+#include "request.hpp"
 #include <arpa/inet.h>
+#include <string.h>
 #include <cerrno>
 
 using namespace std;
@@ -13,56 +15,39 @@ Server::Server(const char* host, uint16_t port){
     _port = port;
 }
 
-const char* get_socket_creation_error(){
-    switch(errno){
-    case EAGAIN:
-        return "Resource temporarily unavailable.";
-    case EINVAL:
-        return "The request is invalid or not supported.";
-    case EIO:
-        return "There has been a network or transport failure.";
-    case ENOBUFS:
-        return "Insufficient system resources are available to complete the call.";
-    };
-    return "Unknown error.";
-}
-
-const char* get_socket_binding_error(){
-    switch(errno){
-    case EPERM:
-        return "The user is not authorized to bind to the port specified.";
-    case ENOBUFS:
-        return "Bind is unable to obtain a buffer due to insufficient storage.";
-    case EACCES:
-        return "Permission denied.";
-    case EADDRINUSE:
-        return "The address is already in use.";
-    };
-    return "Unknown error.";
-}
-
-void handle_request(int socket, int buffer_size){
+void handle_request(int server_socket, int buffer_size){
     char buffer[buffer_size];
-    struct sockaddr_in client_addr;
+    sockaddr_in client_addr;
     socklen_t addr_len = sizeof (client_addr);
 
-    int bytes = recvfrom(socket, buffer, buffer_size, 0, (struct sockaddr*)&client_addr, &addr_len);
+    int client_socket = accept(server_socket, (sockaddr*)&client_addr, &addr_len);
+    uint16_t data = recv(client_socket, &buffer, (buffer_size - 1), 0);
 
-    sendto(socket, buffer, buffer_size, 0, (struct sockaddr*)&client_addr, addr_len);
+    Request request;
+    request.read_request(buffer, data);
+
+    
 }
 
-void Server::run(){
-    if(max_buffer_size > 16000){
+int Server::run(){
+    if(max_buffer_size > 16384){
         cout << "Large buffer size, consider lowering it." << endl;
     }
     
     int sock = socket(AF_INET, SOCK_STREAM, 0);
 
     if(sock == -1){
-        cout << "Socket failed creation with errorcode: " << endl;
-        cout << get_socket_creation_error() << endl;
-        cout << "Terminating gracefully..." << endl;
-        exit(EXIT_FAILURE);
+        cout << "Socket failed creation with error: " << strerror(errno) << " Terminating..." << endl;
+        return -1;
+    }
+
+    int option_name = SO_REUSEADDR;
+    int option_val = 1;
+    int sock_options = setsockopt(sock, SOL_SOCKET, option_name, &option_val, sizeof(int));
+
+    if(sock_options == -1){
+        cout << "Socketoptions failed to configure with error: " << strerror(errno) << " Terminating..." <<endl;
+        return -1;
     }
 
     struct sockaddr_in socket_address;
@@ -73,13 +58,16 @@ void Server::run(){
     int _bind = bind(sock, (struct sockaddr*)&socket_address, sizeof(socket_address));
 
     if(_bind == -1 ){
-        cout << "Socket not able to be bound to port with errorcode: " << endl;
-        cout << get_socket_binding_error() << endl;
-        cout << "Terminating gracefully..." << endl;
-        exit(EXIT_FAILURE);
+        cout << "Socket failed to bind with error: " << strerror(errno) << " Terminating..."<< endl;
+        return -1;
     }
 
-    cout << "Socket bound to port " << _port << endl;
+    if(listen(sock, 1) == -1){
+        cout << "Not able to listen to port with error: " << strerror(errno) << " Terminating..."<< endl;
+        return -1;
+    }
+
+    cout << "Server listening on port " << _port << endl;
 
     while(true){
         handle_request(sock, max_buffer_size);

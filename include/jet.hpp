@@ -5,5 +5,6 @@
 #include "jet/response.hpp"
 #include "jet/server.hpp"
 #include "jet/router.hpp"
+#include "jet/config.hpp"
 
 #include "third_party/json.hpp"

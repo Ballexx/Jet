@@ -1,0 +1,4 @@
+C:/Users/alexs/Downloads/jet/CMakeFiles/jet.dir
+C:/Users/alexs/Downloads/jet/CMakeFiles/jet_app.dir
+C:/Users/alexs/Downloads/jet/CMakeFiles/edit_cache.dir
+C:/Users/alexs/Downloads/jet/CMakeFiles/rebuild_cache.dir

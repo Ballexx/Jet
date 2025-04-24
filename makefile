@@ -118,6 +118,43 @@ jet\fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\jet.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jet.dir\build
 .PHONY : jet\fast
 
+#=============================================================================
+# Target rules for targets named jet_app
+
+# Build rule for target.
+jet_app: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 /nologo -$(MAKEFLAGS) jet_app
+.PHONY : jet_app
+
+# fast build rule for target.
+jet_app\fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jet_app.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jet_app.dir\build
+.PHONY : jet_app\fast
+
+app\main.obj: app\main.cpp.obj
+.PHONY : app\main.obj
+
+# target to build an object file
+app\main.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jet_app.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jet_app.dir\app\main.cpp.obj
+.PHONY : app\main.cpp.obj
+
+app\main.i: app\main.cpp.i
+.PHONY : app\main.i
+
+# target to preprocess a source file
+app\main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jet_app.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jet_app.dir\app\main.cpp.i
+.PHONY : app\main.cpp.i
+
+app\main.s: app\main.cpp.s
+.PHONY : app\main.s
+
+# target to generate assembly for a file
+app\main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\jet_app.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\jet_app.dir\app\main.cpp.s
+.PHONY : app\main.cpp.s
+
 src\helper.obj: src\helper.cpp.obj
 .PHONY : src\helper.obj
 
@@ -247,6 +284,10 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... jet
+	@echo ... jet_app
+	@echo ... app/main.obj
+	@echo ... app/main.i
+	@echo ... app/main.s
 	@echo ... src/helper.obj
 	@echo ... src/helper.i
 	@echo ... src/helper.s

@@ -1,24 +1,25 @@
 #pragma once
 #include <string>
+#include <vector>
+#include <map>
 #include "third_party/json.hpp"
 using json = nlohmann::json;
 
 class Response{
     public:
-    std::string format() const {
-        std::string status_line = "HTTP/1.1 " + std::to_string(status) + "\r\n";
-        std::string body_header = "Content-Length: " + std::to_string(body.size()) + "\r\n";
-        return status_line + body_header + "\r\n" + body;
-    }
+    std::string format();
 
     void set_status(int _status) { status = _status; }
+    void set_body(const std::string& _body) { body = _body; }
 
     void send(std::string body);
     void send_json(json body);
+    void append_header(std::string key, std::string value);
 
     private:
-    void set_body(const std::string& _body) { body = _body; }
+    std::string compile_header();
 
-    int status = 200;
+    uint16_t status = 200;
     std::string body;
+    std::vector<std::map<std::string, std::string>> uncompiled_header;
 };

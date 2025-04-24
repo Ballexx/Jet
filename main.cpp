@@ -26,6 +26,8 @@ int main(){
     Router& router = Router::get();
 
     router.mount("GET", "/", send_body);
+    router.mount("GET", "/json", send_json);
+
     router.mount("POST", "/", send_hi);    
 
     server.fire();

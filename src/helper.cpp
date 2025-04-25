@@ -1,6 +1,8 @@
 #include "utils/common.hpp"
 
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 std::vector<std::string> split(const std::string& s, const std::string& delimiter) {
     std::vector<std::string> tokens;
@@ -28,18 +30,16 @@ std::string str_to_upper(std::string str) {
     return str;
 }
 
-bool is_method_valid(std::string method) {
-    method = str_to_upper(method);
+std::string read_file(std::string path){
+    std::ifstream file(path);
 
-    static std::string methods[9] = {
-        "GET", "HEAD", "POST", "PUT", "DELETE",
-        "CONNECT", "OPTIONS", "TRACE", "PATCH"
-    };
-
-    for (int i = 0; i < 9; ++i) {
-        if (method == methods[i]) {
-            return true;
-        }
+    if (file) {
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        std::string content = buffer.str();
+        return content;
     }
-    return false;
+    else{
+        std::cerr << "Failed to open file.\n";
+    }
 }

@@ -101,7 +101,7 @@ int Server::fire(){
 
         Router::get().execute(request, response);
 
-        std::string response_str = response.format();
+        std::string response_str = response.handle_method(request.method);
         send(client_socket, response_str.c_str(), response_str.size(), 0);
         
     }

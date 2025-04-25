@@ -153,3 +153,29 @@ inline const char* http_status_to_string(int status_code) {
         default: return "Unknown Status";
     }
 }
+
+enum class http_method {
+    GET,
+    POST,
+    PUT,
+    PATCH,
+    DELETE_,
+    HEAD,
+    OPTIONS,
+    CONNECT,
+    TRACE,
+    UNKNOWN
+};
+
+http_method string_to_method(std::string method) {
+    if (method == "GET")    return http_method::GET;
+    if (method == "POST")   return http_method::POST;
+    if (method == "PUT")    return http_method::PUT;
+    if (method == "PATCH")  return http_method::PATCH;
+    if (method == "DELETE") return http_method::DELETE_;
+    if (method == "HEAD")   return http_method::HEAD;
+    if (method == "OPTIONS")return http_method::OPTIONS;
+    if (method == "CONNECT")return http_method::CONNECT;
+    if (method == "TRACE")  return http_method::TRACE;
+    return http_method::UNKNOWN;
+}

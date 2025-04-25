@@ -1,9 +1,16 @@
 #include "jet/response.hpp"
 #include "third_party/json.hpp"
+#include "jet/helper.hpp"
+#include "jet/config.hpp"
+
 #include <map>
 
 #include <string>
 using json = nlohmann::json;
+
+void Response::handle_server_error(){
+
+}
 
 std::string Response::format(){
     std::string compiled_header = compile_header();
@@ -12,6 +19,53 @@ std::string Response::format(){
     std::string header = compiled_header;
 
     return status_line + content_length + compiled_header + "\r\n" + body;
+}
+
+void handle_GET(){
+
+}
+void handle_POST(){
+
+}
+void handle_PUT(){
+
+}
+void handle_PATCH(){
+
+}
+void handle_DELETE(){
+
+}
+void handle_OPTIONS(){
+
+}
+void handle_HEAD(){
+
+}
+void handle_CONNECT(){
+
+}
+void handle_TRACE(){
+
+}
+
+std::string Response::handle_method(std::string method_type){
+    http_method method = string_to_method(method_type);
+
+    switch (method) {
+        case http_method::GET:      handle_GET(); break;
+        case http_method::POST:     handle_POST(); break;
+        case http_method::PUT:      handle_PUT(); break;
+        case http_method::PATCH:    handle_PATCH(); break;
+        case http_method::DELETE_:  handle_DELETE(); break;
+        case http_method::HEAD:     handle_HEAD(); break;
+        case http_method::OPTIONS:  handle_OPTIONS(); break;
+        case http_method::CONNECT:  handle_CONNECT(); break;
+        case http_method::TRACE:    handle_TRACE(); break;
+        default: handle_server_error(); break;
+    }
+
+    return format();
 }
 
 std::string Response::compile_header(){
@@ -69,3 +123,7 @@ void Response::send_json(json body){
     set_body(str_body);
 }
 
+void Response::send_html(std::string path){
+    std::string file_content = read_file(path);
+    set_body(file_content);
+}

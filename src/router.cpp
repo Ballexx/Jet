@@ -1,10 +1,11 @@
 #include "jet/router.hpp"
 #include "jet/helper.hpp"
+#include "jet/config.hpp"
 
 #include <iostream>
 
 void Router::mount(const std::string& method, const std::string& path, handler handler){
-    if(is_method_valid(method) == false){
+    if(string_to_method(method) == http_method::UNKNOWN){
         std::cout << method << " is not a valid method type." << std::endl;
         return;
     }

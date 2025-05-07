@@ -30,6 +30,8 @@ std::string str_to_upper(std::string str) {
     return str;
 }
 
+// Reads a text file and returns content as string
+
 std::string read_file(std::string path){
     std::ifstream file(path);
 

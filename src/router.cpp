@@ -4,6 +4,11 @@
 
 #include <iostream>
 
+// Mounts a method and handler to specified path
+// Method is POST / GET / PUT etc
+// Path is /example/show etc
+// Handler is a simple function with req and res as params
+
 void Router::mount(const std::string& method, const std::string& path, handler handler){
     if(string_to_method(method) == http_method::UNKNOWN){
         std::cout << method << " is not a valid method type." << std::endl;
@@ -16,6 +21,8 @@ void Router::mount(const std::string& method, const std::string& path, handler h
     std::cout << "Mounted " << method << " " << path << std::endl;
 }
 
+// Unmounts method and handler from path
+
 void Router::unmount(const std::string& method, const std::string& path) {
     str_to_lower(method);
     str_to_lower(path);
@@ -25,6 +32,8 @@ void Router::unmount(const std::string& method, const std::string& path) {
         routes.erase(method);
     }
 }
+
+// Handles execution of handler depending on path and request-method
 
 void Router::execute(Request& req, Response& res) {
     std::string method = req.get_method();

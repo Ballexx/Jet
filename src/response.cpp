@@ -12,6 +12,8 @@ void Response::handle_server_error(){
 
 }
 
+// Formats the response header
+
 std::string Response::format(){
     std::string compiled_header = compile_header();
     std::string status_line = "HTTP/1.1 " + std::to_string(status) + "\r\n";
@@ -49,6 +51,8 @@ void handle_TRACE(){
 
 }
 
+// Handle the method depending on the method type
+
 std::string Response::handle_method(std::string method_type){
     http_method method = string_to_method(method_type);
 
@@ -67,6 +71,8 @@ std::string Response::handle_method(std::string method_type){
 
     return format();
 }
+
+// Convert the key-pair header to string format that can be sent as response header
 
 std::string Response::compile_header(){
     std::string compiled_header;
@@ -92,6 +98,10 @@ std::string Response::compile_header(){
     return compiled_header;
 }
 
+// Append a header to existing response headers
+// Params are header-key and header-value
+// Using already existing key will overwrite the current with the newer
+
 void Response::append_header(std::string key, std::string value){
     for(int i = 0; i < uncompiled_header.size(); i++){
         std::string _key;
@@ -113,15 +123,21 @@ void Response::append_header(std::string key, std::string value){
     uncompiled_header.push_back(header);
 }
 
+// Response body is sent as a string
+
 void Response::send(std::string body){
     set_body(body);
 }
+
+// Response body is sent as a JSON-object
 
 void Response::send_json(json body){
     std::string str_body = body.dump();
     append_header("Content-Type", "application/JSON");
     set_body(str_body);
 }
+
+// Response body is sent as HTML-file
 
 void Response::send_html(std::string path){
     std::string file_content = read_file(path);

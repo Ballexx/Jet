@@ -24,6 +24,8 @@ void send_hi(Request& req, Response& res){
 int main(){
     Server server("127.0.0.1", 3000);
     Router& router = Router::get();
+    
+    server.static("");
 
     router.mount("GET", "/", send_body);
     router.mount("GET", "/json", send_json);

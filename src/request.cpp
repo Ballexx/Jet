@@ -3,6 +3,9 @@
 #include "jet/request.hpp"
 #include "jet/helper.hpp"
 
+// Parses request header
+// Param is raw requestdata as a string
+
 void Request::parse(std::string request_data){
     size_t header_end = request_data.find("\r\n\r\n");
 

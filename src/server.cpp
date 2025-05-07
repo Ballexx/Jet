@@ -47,6 +47,8 @@ Server::Server(const char* _host, uint16_t _port) : host(_host), port(_port){}
 
 const uint16_t max_buffer_size = 8192;
 
+// Creates a server running on port _port and set host
+
 int Server::fire(){
     if (init_sockets() != 0) {
         std::cerr << "Socket init failed!" << std::endl;
